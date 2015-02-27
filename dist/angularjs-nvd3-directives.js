@@ -1,4 +1,4 @@
-/*! angularjs-nvd3-directives - v0.0.8 - 2015-02-04
+/*! angularjs-nvd3-directives - v0.0.8 - 2015-02-27
  * http://angularjs-nvd3-directives.github.io/angularjs-nvd3-directives
  * Copyright (c) 2015 Christian Maurer; Licensed Apache License, v2.0 */
 ( function () {
@@ -764,6 +764,22 @@
     scope.margin = margin;
   }
 
+  function updateChartAttributes( chart, attrs ) {
+    for ( var key in attrs ) {
+      if ( typeof chart[ key ] === 'function' ) {
+        chart[ key ]( attrs[ key ] );
+      }
+    }
+  }
+
+  function generateRedrawHandler( scope ) {
+    return function redraw( attrs ) {
+      updateChartAttributes( scope.chart, attrs );
+      scope.d3Call( scope.data, scope.chart );
+      nv.utils.windowResize( scope.chart.update );
+    };
+  }
+
   function getD3Selector( attrs, element ) {
     if ( !attrs.id ) {
       //if an id is not supplied, create a random id.
@@ -813,6 +829,7 @@
       return {
         restrict: 'EA',
         scope: {
+          api: '=',
           data: '=',
           filtername: '=',
           filtervalue: '=',
@@ -933,6 +950,9 @@
                   }
                   scope.d3Call( data, chart );
                   nv.utils.windowResize( chart.update );
+                  if ( scope.api !== undefined ) {
+                    scope.api.redraw = generateRedrawHandler( scope );
+                  }
                   scope.chart = chart;
                   return chart;
                 },
@@ -949,6 +969,7 @@
       return {
         restrict: 'EA',
         scope: {
+          api: '=',
           data: '=',
           filtername: '=',
           filtervalue: '=',
@@ -1072,6 +1093,9 @@
                   }
                   scope.d3Call( data, chart );
                   nv.utils.windowResize( chart.update );
+                  if ( scope.api !== undefined ) {
+                    scope.api.redraw = generateRedrawHandler( scope );
+                  }
                   scope.chart = chart;
                   return chart;
                 },
@@ -1088,6 +1112,7 @@
       return {
         restrict: 'EA',
         scope: {
+          api: '=',
           data: '=',
           filtername: '=',
           filtervalue: '=',
@@ -1254,6 +1279,9 @@
                   }
                   scope.d3Call( data, chart );
                   nv.utils.windowResize( chart.update );
+                  if ( scope.api !== undefined ) {
+                    scope.api.redraw = generateRedrawHandler( scope );
+                  }
                   scope.chart = chart;
                   return chart;
                 },
@@ -1270,6 +1298,7 @@
       return {
         restrict: 'EA',
         scope: {
+          api: '=',
           data: '=',
           filtername: '=',
           filtervalue: '=',
@@ -1380,6 +1409,9 @@
                   }
                   scope.d3Call( data, chart );
                   nv.utils.windowResize( chart.update );
+                  if ( scope.api !== undefined ) {
+                    scope.api.redraw = generateRedrawHandler( scope );
+                  }
                   scope.chart = chart;
                   return chart;
                 },
@@ -1396,6 +1428,7 @@
       return {
         restrict: 'EA',
         scope: {
+          api: '=',
           data: '=',
           filtername: '=',
           filtervalue: '=',
@@ -1505,6 +1538,9 @@
                   }
                   scope.d3Call( data, chart );
                   nv.utils.windowResize( chart.update );
+                  if ( scope.api !== undefined ) {
+                    scope.api.redraw = generateRedrawHandler( scope );
+                  }
                   scope.chart = chart;
                   return chart;
                 },
@@ -1521,6 +1557,7 @@
       return {
         restrict: 'EA',
         scope: {
+          api: '=',
           data: '=',
           filtername: '=',
           filtervalue: '=',
@@ -1636,6 +1673,9 @@
                   }
                   scope.d3Call( data, chart );
                   nv.utils.windowResize( chart.update );
+                  if ( scope.api !== undefined ) {
+                    scope.api.redraw = generateRedrawHandler( scope );
+                  }
                   scope.chart = chart;
                   return chart;
                 },
@@ -1652,6 +1692,7 @@
       return {
         restrict: 'EA',
         scope: {
+          api: '=',
           data: '=',
           filtername: '=',
           filtervalue: '=',
@@ -1761,6 +1802,9 @@
                   }
                   scope.d3Call( data, chart );
                   nv.utils.windowResize( chart.update );
+                  if ( scope.api !== undefined ) {
+                    scope.api.redraw = generateRedrawHandler( scope );
+                  }
                   scope.chart = chart;
                   return chart;
                 },
@@ -1777,6 +1821,7 @@
       return {
         restrict: 'EA',
         scope: {
+          api: '=',
           data: '=',
           filtername: '=',
           filtervalue: '=',
@@ -1851,6 +1896,9 @@
                   }
                   scope.d3Call( data, chart );
                   nv.utils.windowResize( chart.update );
+                  if ( scope.api !== undefined ) {
+                    scope.api.redraw = generateRedrawHandler( scope );
+                  }
                   scope.chart = chart;
                   return chart;
                 },
@@ -1867,6 +1915,7 @@
       return {
         restrict: 'EA',
         scope: {
+          api: '=',
           data: '=',
           filtername: '=',
           filtervalue: '=',
@@ -2031,8 +2080,14 @@
                     chart.sizeRange( scope.sizerange() );
                     chart.zScale( scope.zscale() );
                   }
+                  if ( attrs.sizedomain ) {
+                    chart.sizeDomain( scope.sizedomain() );
+                  }
                   scope.d3Call( data, chart );
                   nv.utils.windowResize( chart.update );
+                  if ( scope.api !== undefined ) {
+                    scope.api.redraw = generateRedrawHandler( scope );
+                  }
                   scope.chart = chart;
                   return chart;
                 },
@@ -2049,6 +2104,7 @@
       return {
         restrict: 'EA',
         scope: {
+          api: '=',
           data: '=',
           filtername: '=',
           filtervalue: '=',
@@ -2182,6 +2238,9 @@
                   }
                   scope.d3Call( data, chart );
                   nv.utils.windowResize( chart.update );
+                  if ( scope.api !== undefined ) {
+                    scope.api.redraw = generateRedrawHandler( scope );
+                  }
                   scope.chart = chart;
                   return chart;
                 },
@@ -2198,6 +2257,7 @@
       return {
         restrict: 'EA',
         scope: {
+          api: '=',
           data: '=',
           filtername: '=',
           filtervalue: '=',
@@ -2343,6 +2403,9 @@
                   }
                   scope.d3Call( data, chart );
                   nv.utils.windowResize( chart.update );
+                  if ( scope.api !== undefined ) {
+                    scope.api.redraw = generateRedrawHandler( scope );
+                  }
                   scope.chart = chart;
                   return chart;
                 },
@@ -2359,6 +2422,7 @@
       return {
         restrict: 'EA',
         scope: {
+          api: '=',
           data: '=',
           filtername: '=',
           filtervalue: '=',
@@ -2547,6 +2611,9 @@
                   }
                   scope.d3Call( data, chart );
                   nv.utils.windowResize( chart.update );
+                  if ( scope.api !== undefined ) {
+                    scope.api.redraw = generateRedrawHandler( scope );
+                  }
                   scope.chart = chart;
                   return chart;
                 },
@@ -2563,6 +2630,7 @@
       return {
         restrict: 'EA',
         scope: {
+          api: '=',
           data: '=',
           filtername: '=',
           filtervalue: '=',
@@ -2613,7 +2681,10 @@
                     chart.tooltipContent( scope.tooltipcontent() );
                   }
                   scope.d3Call( data, chart );
-                  nv.utils.windowResize( chart.update );
+                  // nv.utils.windowResize(chart.update);
+                  if ( scope.api !== undefined ) {
+                    scope.api.redraw = generateRedrawHandler( scope );
+                  }
                   scope.chart = chart;
                   return chart;
                 },
@@ -2630,6 +2701,7 @@
       return {
         restrict: 'EA',
         scope: {
+          api: '=',
           data: '=',
           filtername: '=',
           filtervalue: '=',
@@ -2690,7 +2762,10 @@
                     chart.yScale( scope.yScale() );
                   }
                   scope.d3Call( data, chart );
-                  nv.utils.windowResize( chart.update );
+                  // nv.utils.windowResize(chart.update);
+                  if ( scope.api !== undefined ) {
+                    scope.api.redraw = generateRedrawHandler( scope );
+                  }
                   scope.chart = chart;
                   return chart;
                 },
@@ -2716,6 +2791,7 @@
       return {
         restrict: 'EA',
         scope: {
+          api: '=',
           data: '=',
           filtername: '=',
           filtervalue: '=',
@@ -2844,6 +2920,9 @@
                   processEvents( chart, scope );
                   scope.d3Call( data, chart );
                   nv.utils.windowResize( chart.update );
+                  if ( scope.api !== undefined ) {
+                    scope.api.redraw = generateRedrawHandler( scope );
+                  }
                   scope.chart = chart;
                   return chart;
                 },
