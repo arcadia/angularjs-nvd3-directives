@@ -2081,7 +2081,7 @@
                                     }
 
                                     scope.d3Call(data, chart);
-                                    nv.utils.windowResize(chart.update);
+                                    // nv.utils.windowResize(chart.update);
                                     scope.chart = chart;
                                     return chart;
                                 },
@@ -2168,7 +2168,7 @@
                                     }
 
                                     scope.d3Call(data, chart);
-                                    nv.utils.windowResize(chart.update);
+                                    // nv.utils.windowResize(chart.update);
                                     scope.chart = chart;
                                     return chart;
                                 },
@@ -2295,7 +2295,7 @@
                         if (data && angular.isDefined(scope.filtername) && angular.isDefined(scope.filtervalue)) {
                             data =  $filter(scope.filtername)(data, scope.filtervalue);
                         }
-                        
+
                         if(data){
                             //if the chart exists on the scope, do not call addGraph again, update data and call the chart.
                             if(scope.chart){
