@@ -2085,7 +2085,7 @@
                                     }
 
                                     scope.d3Call(data, chart);
-                                    nv.utils.windowResize(chart.update);
+                                    // nv.utils.windowResize(chart.update);
                                     scope.chart = chart;
                                     return chart;
                                 },
@@ -2172,7 +2172,7 @@
                                     }
 
                                     scope.d3Call(data, chart);
-                                    nv.utils.windowResize(chart.update);
+                                    // nv.utils.windowResize(chart.update);
                                     scope.chart = chart;
                                     return chart;
                                 },
