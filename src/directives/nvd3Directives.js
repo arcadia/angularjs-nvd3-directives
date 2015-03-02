@@ -65,7 +65,8 @@
                 .append('svg');
         }
         d3.select(d3Select + ' svg')
-            .attr('viewBox', '0 0 ' + scope.width + ' ' + scope.height)
+            .attr('height', scope.height)
+            .attr('width', scope.width)
             .datum(data)
             .transition().duration((attrs.transitionduration === undefined ? 250 : (+attrs.transitionduration)))
             .call(chart);
@@ -76,7 +77,8 @@
             chart.width(scope.width).height(scope.height);
             var d3Select = getD3Selector(attrs, element);
             d3.select(d3Select + ' svg')
-                .attr('viewBox', '0 0 ' + scope.width + ' ' + scope.height);
+                .attr('height', scope.height)
+                .attr('width', scope.width);
             nv.utils.windowResize(chart);
             scope.chart.update();
         }
@@ -530,8 +532,8 @@
                                         .y(attrs.y === undefined ? function(d){ return d[1]; } : scope.y())
                                         .forceX(attrs.forcex === undefined ? [] : scope.$eval(attrs.forcex)) // List of numbers to Force into the X scale (ie. 0, or a max / min, etc.)
                                         .forceY(attrs.forcey === undefined ? [0] : scope.$eval(attrs.forcey)) // List of numbers to Force into the Y scale
-                                        .size(attrs.size === undefined ? function(d) { return (d.size === undefined ? 1 : d.size); } : scope.size())
-                                        .forceSize(attrs.forcesize === undefined ? [] : scope.$eval(attrs.forcesize)) // List of numbers to Force into the Size scale
+                                        .pointSize(attrs.size === undefined ? function(d) { return (d.size === undefined ? 1 : d.size); } : scope.size())
+                                        .forcePoint(attrs.forcesize === undefined ? [] : scope.$eval(attrs.forcesize)) // List of numbers to Force into the Size scale
                                         .showLegend(attrs.showlegend === undefined ? false : (attrs.showlegend === 'true'))
                                         .showControls(attrs.showcontrols === undefined ? false : (attrs.showcontrols === 'true'))
                                         .showXAxis(attrs.showxaxis === undefined ? false : (attrs.showxaxis  === 'true'))
@@ -1223,7 +1225,6 @@
                     donut: '@',
                     donutRatio: '@',
                     labelthreshold: '@',
-                    description: '&',
                     tooltips: '@',
                     tooltipcontent: '&',
                     valueFormat: '&',
@@ -1281,7 +1282,6 @@
                                         .pieLabelsOutside(attrs.pielabelsoutside === undefined ? true : (attrs.pielabelsoutside === 'true'))
                                         .valueFormat(attrs.valueformat === undefined ? d3.format(',.2f') : attrs.valueformat)
                                         .showLegend(attrs.showlegend === undefined ? false : (attrs.showlegend === 'true'))
-                                        .description(attrs.description === undefined ?  function(d) { return d.description; } : scope.description())
                                         .color(attrs.color === undefined ? nv.utils.defaultColor()  : scope.color())
                                         .donutLabelsOutside(attrs.donutlabelsoutside === undefined ? false : (attrs.donutlabelsoutside === 'true'))
                                         .donut(attrs.donut === undefined ? false : (attrs.donut === 'true'))
@@ -1319,13 +1319,9 @@
                     id: '@',
                     showlegend: '@',
                     tooltips: '@',
-                    showcontrols: '@',
                     showDistX: '@',
                     showDistY: '@',
                     rightAlignYAxis: '@',
-                    fisheye: '@',
-                    xPadding: '@',
-                    yPadding: '@',
                     tooltipContent: '&',
                     tooltipXContent: '&',
                     tooltipYContent: '&',
@@ -1334,7 +1330,6 @@
                     nodata: '@',
                     transitionDuration: '@',
                     shape: '&',
-                    onlyCircles: '@',
                     interactive: '@',
                     x: '&',
                     y: '&',
@@ -1437,29 +1432,24 @@
                                         .margin(scope.margin)
                                         .x(attrs.x === undefined ? function(d){ return d.x; } : scope.x())
                                         .y(attrs.y === undefined ? function(d){ return d.y; } : scope.y())
-                                        .size(attrs.size === undefined ? function(d){ return (d.size === undefined ? 1 : d.size); }: scope.size())
+                                        .pointSize(attrs.size === undefined ? function(d){ return (d.size === undefined ? 1 : d.size); }: scope.size())
                                         .forceX(attrs.forcex === undefined ? [] : scope.$eval(attrs.forcex))
                                         .forceY(attrs.forcey === undefined ? [] : scope.$eval(attrs.forcey))
-                                        .forceSize(attrs.forcesize === undefined ? [] : scope.$eval(attrs.forcesize))
+                                        .forcePoint(attrs.forcesize === undefined ? [] : scope.$eval(attrs.forcesize))
                                         .interactive(attrs.interactive === undefined ? false : (attrs.interactive === 'true'))
                                         .tooltips(attrs.tooltips === undefined ? false : (attrs.tooltips  === 'true'))
                                         .tooltipContent(attrs.tooltipContent === undefined ? null : scope.tooltipContent())
                                         .tooltipXContent(attrs.tooltipxcontent === undefined ? function(key, x) { return '<strong>' + x + '</strong>'; } : scope.tooltipXContent())
                                         .tooltipYContent(attrs.tooltipycontent === undefined ? function(key, x, y) { return '<strong>' + y + '</strong>'; } : scope.tooltipYContent())
-                                        .showControls(attrs.showcontrols === undefined ? false : (attrs.showcontrols === 'true'))
                                         .showLegend(attrs.showlegend === undefined ? false : (attrs.showlegend === 'true'))
                                         .showDistX(attrs.showdistx === undefined ? false : (attrs.showdistx === 'true'))
                                         .showDistY(attrs.showdisty === undefined ? false : (attrs.showdisty === 'true'))
-                                        .xPadding(attrs.xpadding === undefined ? 0 : (+attrs.xpadding))
-                                        .yPadding(attrs.ypadding === undefined ? 0 : (+attrs.ypadding))
-                                        .fisheye(attrs.fisheye === undefined ? 0 : (+attrs.fisheye))
                                         .noData(attrs.nodata === undefined ? 'No Data Available.' : scope.nodata)
                                         .color(attrs.color === undefined ? nv.utils.defaultColor()  : scope.color())
-                                        .transitionDuration(attrs.transitionduration === undefined ? 250 : (+attrs.transitionduration));
+                                        .duration(attrs.transitionduration === undefined ? 250 : (+attrs.transitionduration));
 
                                     if(attrs.shape){
-                                        chart.scatter.onlyCircles(false);
-                                        chart.scatter.shape(attrs.shape === undefined ? function(d) { return d.shape || 'circle'; } : scope.shape());
+                                        chart.scatter.pointShape(attrs.shape === undefined ? function(d) { return d.shape || 'circle'; } : scope.shape());
                                     }
 
     //'pointActive', 'clipVoronoi', 'clipRadius', 'useVoronoi'
@@ -1530,11 +1520,9 @@
                     id: '@',
                     showlegend: '@',
                     tooltips: '@',
-                    showcontrols: '@',
                     showDistX: '@',
                     showDistY: '@',
                     rightAlignYAxis: '@',
-                    fisheye: '@',
                     tooltipContent: '&',
                     tooltipXContent: '&',
                     tooltipYContent: '&',
@@ -1543,7 +1531,6 @@
                     nodata: '@',
                     transitionDuration: '@',
                     shape: '&',
-                    onlyCircles: '@',
                     interactive: '@',
                     x: '&',
                     y: '&',
@@ -1645,24 +1632,21 @@
                                         .margin(scope.margin)
                                         .x(attrs.x === undefined ? function(d){ return d.x; } : scope.x())
                                         .y(attrs.y === undefined ? function(d){ return d.y; } : scope.y())
-                                        .size(attrs.size === undefined ? function(d){ return (d.size === undefined ? 1 : d.size); }: scope.size())
+                                        .pointSize(attrs.size === undefined ? function(d){ return (d.size === undefined ? 1 : d.size); }: scope.size())
                                         .interactive(attrs.interactive === undefined ? false : (attrs.interactive === 'true'))
                                         .tooltips(attrs.tooltips === undefined ? false : (attrs.tooltips  === 'true'))
                                         .tooltipContent(attrs.tooltipContent === undefined ? null : scope.tooltipContent())
                                         .tooltipXContent(attrs.tooltipxcontent === undefined ? function(key, x) { return '<strong>' + x + '</strong>'; } : scope.tooltipXContent())
                                         .tooltipYContent(attrs.tooltipycontent === undefined ? function(key, x, y) { return '<strong>' + y + '</strong>'; } : scope.tooltipYContent())
-                                        .showControls(attrs.showcontrols === undefined ? false : (attrs.showcontrols === 'true'))
                                         .showLegend(attrs.showlegend === undefined ? false : (attrs.showlegend === 'true'))
                                         .showDistX(attrs.showdistx === undefined ? false : (attrs.showdistx === 'true'))
                                         .showDistY(attrs.showdisty === undefined ? false : (attrs.showdisty === 'true'))
-                                        .fisheye(attrs.fisheye === undefined ? 0 : (+attrs.fisheye))
                                         .noData(attrs.nodata === undefined ? 'No Data Available.' : scope.nodata)
                                         .color(attrs.color === undefined ? nv.utils.defaultColor()  : scope.color())
-                                        .transitionDuration(attrs.transitionduration === undefined ? 250 : (+attrs.transitionduration));
+                                        .duration(attrs.transitionduration === undefined ? 250 : (+attrs.transitionduration));
 
                                     if(attrs.shape){
-                                        chart.scatter.onlyCircles(false);
-                                        chart.scatter.shape(attrs.shape === undefined ? function(d) { return d.shape || 'circle'; } : scope.shape());
+                                        chart.scatter.pointShape(attrs.shape === undefined ? function(d) { return d.shape || 'circle'; } : scope.shape());
                                     }
 
                                     scope.d3Call(data, chart);
@@ -2054,7 +2038,7 @@
                                         .noData(attrs.nodata === undefined ? 'No Data Available.' : scope.nodata)
                                         .color(attrs.color === undefined ? nv.utils.defaultColor()  : scope.color())
                                         .isArea(attrs.isarea === undefined ? function(d) { return d.area; } : function(){ return (attrs.isarea === 'true'); })
-                                        .size(attrs.size === undefined ? function(d){ return (d.size === undefined ? 1 : d.size); }: scope.size())
+                                        .pointSize(attrs.size === undefined ? function(d){ return (d.size === undefined ? 1 : d.size); }: scope.size())
                                         .interactive(attrs.interactive === undefined ? false : (attrs.interactive === 'true'))
                                         .clipEdge(attrs.clipedge === undefined ? false : (attrs.clipedge === 'true'))
                                         .clipVoronoi(attrs.clipvoronoi === undefined ? false : (attrs.clipvoronoi === 'true'))
