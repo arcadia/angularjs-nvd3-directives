@@ -65,7 +65,8 @@
                 .append('svg');
         }
         d3.select(d3Select + ' svg')
-            .attr('viewBox', '0 0 ' + scope.width + ' ' + scope.height)
+            .attr('height', scope.height)
+            .attr('width', scope.width)
             .datum(data)
             .transition().duration((attrs.transitionduration === undefined ? 250 : (+attrs.transitionduration)))
             .call(chart);
@@ -76,7 +77,8 @@
             chart.width(scope.width).height(scope.height);
             var d3Select = getD3Selector(attrs, element);
             d3.select(d3Select + ' svg')
-                .attr('viewBox', '0 0 ' + scope.width + ' ' + scope.height);
+                .attr('height', scope.height)
+                .attr('width', scope.width);
             nv.utils.windowResize(chart);
             scope.chart.update();
         }
@@ -1223,7 +1225,6 @@
                     donut: '@',
                     donutRatio: '@',
                     labelthreshold: '@',
-                    description: '&',
                     tooltips: '@',
                     tooltipcontent: '&',
                     valueFormat: '&',
@@ -1281,7 +1282,6 @@
                                         .pieLabelsOutside(attrs.pielabelsoutside === undefined ? true : (attrs.pielabelsoutside === 'true'))
                                         .valueFormat(attrs.valueformat === undefined ? d3.format(',.2f') : attrs.valueformat)
                                         .showLegend(attrs.showlegend === undefined ? false : (attrs.showlegend === 'true'))
-                                        .description(attrs.description === undefined ?  function(d) { return d.description; } : scope.description())
                                         .color(attrs.color === undefined ? nv.utils.defaultColor()  : scope.color())
                                         .donutLabelsOutside(attrs.donutlabelsoutside === undefined ? false : (attrs.donutlabelsoutside === 'true'))
                                         .donut(attrs.donut === undefined ? false : (attrs.donut === 'true'))
